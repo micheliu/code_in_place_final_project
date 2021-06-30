@@ -1,0 +1,101 @@
+"""
+File: word_guess.py
+-------------------
+This program is a word guessing game. Players will be presented with 5 question rounds and 3 guesses. 
+After making 3 errors, the program will terminate.
+"""
+
+#playing the game
+#generating the question and asking
+#collect user answer
+#check the answer
+#if correct, continue
+#if incorrect, try again (up to 3 chances)
+#terminate the program after 5 questions are asked of 3 strikes are up
+
+import random
+import sys
+
+dict = {'sad':'happy', 'code':'python', 'flight':'travel', 'Stanford':'university', 'difficult':'hard', 
+        'love':'hate', 'wrong':'right', 'Pixar':'animation', 'cat':'dog', 'Pikachu':'pokemon', 'Luigi':'mario',
+        'sister':'brother'}
+
+def main():
+    #intro
+    print("")
+    print("Welcome to Michelle's Word Guessing Game! In this game, you will be given a clue and a chance to guess the mystery word.")
+    print("Enter the correct answer to move onto the next question! There are 5 questions, with 3 tries in total. Good luck!")
+    input("Press 'enter' to start.")
+    play_game()
+
+def play_game():
+    print("") #empty line
+    question = 0
+    strike_outs = 0
+
+    #creates a random list
+    random_list = []
+
+    #Loop to keep the game running as long as it is not over 5 questions or 3 strikes, whatever comes first
+    while question <= 4 and strike_outs < 3:
+        if strike_outs > 3:
+            sys.exit()
+
+        #question counter
+        question += 1
+
+        #generates random key from dictionary
+        random_key = random.choice(list(dict))
+
+        #asks question
+        if random_key not in random_list:
+            print("Question " + str(question) + ": The clue is " + random_key + ". What is the mystery word?")
+
+        #generate a new random key from dictionary & ask the question
+        while random_key in random_list:
+            random_key = random.choice(list(dict))
+            if random_key not in random_list:
+                print("Question " + str(question) + ": The clue is " + random_key + ". What is the mystery word?")
+
+        #appends the list with random key
+        random_list.append(random_key) 
+        #test line
+        #print(random_list)
+
+        #gets user answer
+        user_answer = str(input('Your answer: '))
+        user_answer = user_answer.lower()
+
+        #checks answer and apply strikes for incorrect guesses
+        while user_answer != dict[random_key]:
+            strike_outs += 1
+            if strike_outs <= 2:
+                print("That is not correct. Strike " + str(strike_outs))
+                print("")
+                user_answer = str(input('Try again. Your answer: '))
+                user_answer = user_answer.lower()
+            else:
+                print("That is not correct. Strike 3, you're out!")
+                print("Thanks for playing!")
+                sys.exit()
+
+        #if answer is correct and less than 3 strikes
+        while user_answer == dict[random_key] and strike_outs <= 2:
+            print("The mystery word is " + dict[random_key] + ". You are correct!")
+
+            #if answer is correct, continue playing
+            if question <= 4:
+                print("")
+                user_answer = str(input("Press 'enter' to move on to the next round."))
+                print("")
+            #stop playing after 5 rounds
+            else:
+                print("")
+                print("Congrats, you've answered the 5 questions without striking out. Thanks for playing!")
+                print("Rerun the program to play again.")
+                print("")
+                sys.exit()
+
+# This provided line is required at the end of a Python file to call the main() function.
+if __name__ == "__main__":
+    main()
